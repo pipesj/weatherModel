@@ -12,4 +12,6 @@ hourly_data['datetime'] = pd.to_datetime(hourly_data['datetimeEpoch'], unit='s')
 hourly_data = hourly_data.loc[:,kept_columns]
 hourly_data = hourly_data.rename(columns={'pressure':'sealevelpressure'})
 hourly_data = hourly_data.add_suffix("CO")
+
+print("Ran!")
 # hourly_data.set_index('datetime', inplace=True)
