@@ -1,5 +1,6 @@
 import pandas as pd
 import requests
+from pandas.io.json import json_normalize
 
 coxsackieURL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Coxsackie%2C%20NY/next7days?unitGroup=metric&include=hours&key=9RGSNMG7YSS4ZZ8PMSVTGUGRX&contentType=json"
 r = requests.get(coxsackieURL)
