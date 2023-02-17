@@ -7,7 +7,7 @@ r = requests.get(coxsackieURL)
 json = r.json()
 print("Got to json")
 print("pandas version: "+ pd.__version__)
-hourly_data = pd.json_normalize(json, record_path=['days', 'hours'])
+hourly_data = json_normalize(json, record_path=['days', 'hours'])
 
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
 hourly_data['datetime'] = pd.to_datetime(hourly_data['datetimeEpoch'], unit='s')
