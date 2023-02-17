@@ -6,7 +6,7 @@ coxsackieURL = "https://weather.visualcrossing.com/VisualCrossingWebServices/res
 r = requests.get(coxsackieURL)
 json = r.json()
 print("Got to json")
-print("pandas version: "+ print(pd.__version__))
+print("pandas version: "+ pd.__version__)
 hourly_data = pd.json_normalize(json, record_path=['days', 'hours'])
 
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
