@@ -15,10 +15,26 @@ SchenectadySeaLevelPressure = 1004
 
 bme280.sea_level_pressure = SchenectadySeaLevelPressure
 
+# create the SPI bus
+spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
+
+# create the chip select
+cs = digitalio.DigitalInOut(board.CE0)
+
+# create the MCP3008 object
+mcp = MCP.MCP3008(spi, cs)
+
+# create an analog input channel on CH0
+chan0 = AnalogIn(mcp, MCP.P0)
+
+# read the voltage and current
+voltage = chan0.voltage
+
 
 while True:
     print("\nTemperature: %0.1f C" % bme280.temperature)
     print("Humidity: %0.1f %%" % bme280.relative_humidity)
     print("Pressure: %0.1f hPa" % bme280.pressure)
-    print("Altitude = %0.2f meters" % bme280.altitude)
+    #print("Altitude = %0.2f meters" % bme280.altitude)
+    print("Voltage: %0.2f V" % voltage)
     time.sleep(2)
