@@ -16,10 +16,10 @@ SchenectadySeaLevelPressure = 1004
 bme280.sea_level_pressure = SchenectadySeaLevelPressure
 
 # create the SPI bus
-spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
+spi = busio.SPI(clock=board.SPI_CLK, MISO=board.SPI_MI, MOSI=board.SPI_MO)
 
 # create the chip select
-cs = digitalio.DigitalInOut(board.CE0)
+cs = digitalio.DigitalInOut(board.CSB)
 
 # create the MCP3008 object
 mcp = MCP.MCP3008(spi, cs)
