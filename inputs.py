@@ -3,7 +3,7 @@ from adafruit_bme280 import basic as adafruit_bme280
 import board
 
 print("Successful imports")
-i2c = board.I2C("/dev/i2c-3")
+i2c = busio.I2C(board.I2C1_SCL, board.I2C1_SDA)
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
 
 #hPa
