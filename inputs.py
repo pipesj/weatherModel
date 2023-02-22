@@ -1,6 +1,7 @@
 import time
 from adafruit_bme280 import basic as adafruit_bme280
 import board
+import busio
 
 print("Successful imports")
 i2c = busio.I2C(board.I2C1_SCL, board.I2C1_SDA)
