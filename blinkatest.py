@@ -3,6 +3,7 @@ import digitalio
 import busio
 
 print("Hello blinka!")
+print(dir(board))
 
 # Try to great a Digital input
 pin = digitalio.DigitalInOut(board.GPIO_P13)
