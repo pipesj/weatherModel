@@ -4,7 +4,7 @@ from adafruit_bme280 import basic as adafruit_bme280
 import board
 
 print("Successful imports")
-i2c = board.I2C()
+i2c = I2C("/dev/i2c-0")
 bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
 
 #hPa
