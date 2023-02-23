@@ -28,7 +28,7 @@ mcp = MCP.MCP3008(spi, cs)
 chan0 = AnalogIn(mcp, MCP.P0)
 
 # read the voltage and current
-voltage = chan0.voltage
+
 
 
 while True:
@@ -36,5 +36,6 @@ while True:
     print("Humidity: %0.1f %%" % bme280.relative_humidity)
     print("Pressure: %0.1f hPa" % bme280.pressure)
     #print("Altitude = %0.2f meters" % bme280.altitude)
+    voltage = chan0.voltage
     print("Voltage: %0.2f V" % voltage)
     time.sleep(2)
