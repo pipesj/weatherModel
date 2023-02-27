@@ -48,7 +48,9 @@ csv_path = "uploadData.csv"
 
 
 while True:
-    current_datetime = datetime.now().replace(minute=0, second=0, microsecond=0) # Replace with the desired rounding
+    timeZoneAdjustment = -5 #hours different from UTC to EST
+    exactCurrent_datetime = datetime.datetime.utcnow()+datetime.timedelta(hours=timeZoneAdjustment)
+    current_datetime = exactCurrent_datetime.replace(minute=0, second=0, microsecond=0) # Replace with the desired rounding
     target_datetime = current_datetime + timedelta(days=1)
 
     inputReadings = pd.DataFrame()
