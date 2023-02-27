@@ -49,7 +49,7 @@ csv_path = "uploadData.csv"
 
 while True:
     timeZoneAdjustment = -5 #hours different from UTC to EST
-    exactCurrent_datetime = datetime.utcnow()+datetime.timedelta(hours=timeZoneAdjustment)
+    exactCurrent_datetime = datetime.utcnow()+timedelta(hours=timeZoneAdjustment)
     current_datetime = exactCurrent_datetime.replace(minute=0, second=0, microsecond=0) # Replace with the desired rounding
     target_datetime = current_datetime + timedelta(days=1)
 
