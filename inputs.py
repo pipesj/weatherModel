@@ -43,10 +43,6 @@ kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "prec
 csv_path = "uploadData.csv"
 
 
-
-
-
-
 while True:
     timeZoneAdjustment = -5 #hours different from UTC to EST
     exactCurrent_datetime = datetime.utcnow()+timedelta(hours=timeZoneAdjustment)
@@ -63,9 +59,8 @@ while True:
     inputReadings['humiditySC'] = [bme280.relative_humidity]
     inputReadings['pressureSC'] = [bme280.pressure]
 
-    hours_days_addOn['hours'] = [current_datetime.timetuple().tm_yday]
-    hours_days_addOn['dayOfYear'] = [current_datetime.hour]
-
+    hours_days_addOn['dayOfYear'] = [current_datetime.timetuple().tm_yday]
+    hours_days_addOn['hours'] = [current_datetime.hour]
 
 
     coxsackieURL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Coxsackie%2C%20NY/next7days?unitGroup=metric&include=hours&key=9RGSNMG7YSS4ZZ8PMSVTGUGRX&contentType=json"
