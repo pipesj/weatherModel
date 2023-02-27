@@ -54,10 +54,10 @@ while True:
     
 
     inputReadings['datetime'] = [current_datetime]
-    inputReadings['solarradiationSC'] = [chan0.voltage]
-    inputReadings['tempSC'] = [bme280.temperature]
-    inputReadings['humiditySC'] = [bme280.relative_humidity]
-    inputReadings['pressureSC'] = [bme280.pressure]
+    inputReadings['solarradiationSC'] = [round(chan0.voltage,2)]
+    inputReadings['tempSC'] = [round(bme280.temperature,2)]
+    inputReadings['humiditySC'] = [round(bme280.relative_humidity,2)]
+    inputReadings['pressureSC'] = [round(bme280.pressure,2)]
 
     hours_days_addOn['dayOfYear'] = [current_datetime.timetuple().tm_yday]
     hours_days_addOn['hours'] = [current_datetime.hour]
