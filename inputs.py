@@ -108,7 +108,7 @@ while True:
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
 
     # Convert row to array
-    data = np.array(combined_data.values)
+    data = combined_data.values.tolist()
     # if os.path.isfile(csv_path) and os.path.getsize(csv_path) > 0:
     #     combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime],hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
     #     combined_data = combined_data.to_frame().transpose()
