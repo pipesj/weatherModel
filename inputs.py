@@ -11,6 +11,7 @@ from pandas.io.json import json_normalize
 import os.path
 from datetime import datetime, timedelta
 import numpy as np
+import json
 
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
 csv_path = "uploadData.csv"
@@ -43,6 +44,8 @@ time_between_readings = 60*minutes
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
 csv_path = "uploadData.csv"
 
+# Define the API endpoint URL
+url = 'https://vbxih78ri8.execute-api.us-east-2.amazonaws.com/Main'
 
 while True:
     timeZoneAdjustment = -5 #hours different from UTC to EST
@@ -118,6 +121,19 @@ while True:
     
         
     print(data)
+    # Convert the data to a JSON string
+    payload = json.dumps(data)
+
+    # Set the headers
+    headers = {'Content-Type': 'application/json'}
+
+    # Send the POST request
+    response = requests.post(url, headers=headers, data=payload)
+
+    # Print the response from the Lambda function
+    print(response.text)
+
+
     time.sleep(time_between_readings)
 
 
