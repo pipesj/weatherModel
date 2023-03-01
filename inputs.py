@@ -10,6 +10,7 @@ import requests
 from pandas.io.json import json_normalize
 import os.path
 from datetime import datetime, timedelta
+import numpy as np
 
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
 csv_path = "uploadData.csv"
@@ -99,19 +100,24 @@ while True:
     hourly_dataSS = hourly_dataSS.rename(columns={'pressure':'sealevelpressure'})
     hourly_dataSS = hourly_dataSS.add_suffix("SS")
 
+    combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime],hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
+    # Convert datetime object to string
+    combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
 
-    if os.path.isfile(csv_path) and os.path.getsize(csv_path) > 0:
-        combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime],hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
-        combined_data = combined_data.to_frame().transpose()
-        combined_data.to_csv(csv_path, mode='a', index=False, header=False)
-    else:
+    # Convert row to array
+    data = np.array(combined_data.values)
+    # if os.path.isfile(csv_path) and os.path.getsize(csv_path) > 0:
+    #     combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime],hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
+    #     combined_data = combined_data.to_frame().transpose()
+    #     combined_data.to_csv(csv_path, mode='a', index=False, header=False)
+    # else:
 
-        combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime], hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
-        combined_data = combined_data.to_frame().transpose()
-        combined_data.to_csv(csv_path, mode='w', index=False, header=True)
+    #     combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime], hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
+    #     combined_data = combined_data.to_frame().transpose()
+    #     combined_data.to_csv(csv_path, mode='w', index=False, header=True)
     
         
-    print(combined_data.iloc[0])
+    print(data)
     time.sleep(time_between_readings)
 
 
