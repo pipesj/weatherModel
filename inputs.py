@@ -61,7 +61,7 @@ def average_inputs():
         pressure[i] = bme280.pressure
         temp[i] = bme280.temperature
         hum[i] = bme280.relative_humidity
-        sR[i] = chan0.voltage((chan0.voltage - chan2.voltage) / 10000 )   #10*10^3 kOhm resistor... V*V/R = VI = Watts
+        sR[i] = chan0.voltage*((chan0.voltage - chan2.voltage) / 10000 )   #10*10^3 kOhm resistor... V*V/R = VI = Watts
         print("Reading #%d \n Voltage: %f, Power %f, Pressure %f, Temp %f, Humidity %f." %(i, chan0.voltage, sR[i], pressure[i], temp[i],hum[i]))
         time.sleep(5)
     pressure = np.array(pressure)
