@@ -5,6 +5,7 @@ import busio
 import digitalio
 import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
+import machine
 import pandas as pd
 import requests
 from pandas.io.json import json_normalize
@@ -12,6 +13,8 @@ import os.path
 from datetime import datetime, timedelta
 import numpy as np
 import json
+
+# ssh mendel@192.168.137.114
 
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
 csv_path = "uploadData.csv"
@@ -36,9 +39,9 @@ mcp = MCP.MCP3008(spi, cs)
 
 # create an analog input channel on CH0
 chan0 = AnalogIn(mcp, MCP.P0)
+chan2 = AnalogIn(mcp, MCP.P2)
 
-minutes = 60
-time_between_readings = 60*minutes
+time_between_readings = 3540000 #59 minutes in ms
 
 
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
@@ -46,6 +49,33 @@ csv_path = "uploadData.csv"
 
 # Define the API endpoint URL
 url = 'https://vbxih78ri8.execute-api.us-east-2.amazonaws.com/Main'
+
+def average_inputs():
+    inputs_averaged = []
+    pressure = []
+    temp = []
+    hum = []
+    sR = []
+    print("Averaging current readings!")
+    for i in range(6):
+        pressure[i] = bme280.pressure
+        temp[i] = bme280.temperature
+        hum[i] = bme280.relative_humidity
+        sR[i] = chan0.voltage((chan0.voltage - chan2.voltage) / 10000 )   #10*10^3 kOhm resistor... V*V/R = VI = Watts
+        print("Reading #%d \n Voltage: %f, Power %f, Pressure %f, Temp %f, Humidity %f." %(i, chan0.voltage, sR[i], pressure[i], temp[i],hum[i]))
+        time.sleep(5)
+    pressure = np.array(pressure)
+    temp = np.array(temp)
+    hum = np.array(hum)
+    sR = np.array(sR)
+
+  
+    inputs_averaged[0] = np.mean(pressure)
+    inputs_averaged[1] = np.mean(temp)
+    inputs_averaged[2] = np.mean(hum)
+    inputs_averaged[3] = np.mean(sR)
+
+    return inputs_averaged
 
 while True:
     timeZoneAdjustment = -5 #hours different from UTC to EST
@@ -56,12 +86,13 @@ while True:
     inputReadings = pd.DataFrame()
     hours_days_addOn = pd.DataFrame()
     
+    averaged_inputs = average_inputs()
 
     inputReadings['datetime'] = [current_datetime]
-    inputReadings['pressureSC'] = [round(bme280.pressure,2)]
-    inputReadings['tempSC'] = [round(bme280.temperature,2)]
-    inputReadings['humiditySC'] = [round(bme280.relative_humidity,2)]
-    inputReadings['solarradiationSC'] = [round(chan0.voltage,2)]
+    inputReadings['sealevelpressureSC'] = [round(averaged_inputs[0],2)]
+    inputReadings['tempSC'] = [round(averaged_inputs[1],2)]
+    inputReadings['humiditySC'] = [round(averaged_inputs[2],2)]
+    inputReadings['solarradiationSC'] = [averaged_inputs[3]]
     
 
     hours_days_addOn['dayOfYear'] = [current_datetime.timetuple().tm_yday]
@@ -104,21 +135,12 @@ while True:
     hourly_dataSS = hourly_dataSS.rename(columns={'pressure':'sealevelpressure'})
     hourly_dataSS = hourly_dataSS.add_suffix("SS")
 
-    combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime],hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
+    combined_data = pd.concat([inputReadings.iloc[0] ,hours_days_addOn.iloc[0], hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime]], axis=0, ignore_index=False)
     # Convert datetime object to string
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
 
     # Convert row to array
     data = combined_data.values.tolist()
-    # if os.path.isfile(csv_path) and os.path.getsize(csv_path) > 0:
-    #     combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime],hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
-    #     combined_data = combined_data.to_frame().transpose()
-    #     combined_data.to_csv(csv_path, mode='a', index=False, header=False)
-    # else:
-
-    #     combined_data = pd.concat([inputReadings.iloc[0] ,hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime], hours_days_addOn.iloc[0]], axis=0, ignore_index=False)
-    #     combined_data = combined_data.to_frame().transpose()
-    #     combined_data.to_csv(csv_path, mode='w', index=False, header=True)
     
         
     print(data)
@@ -135,7 +157,7 @@ while True:
     print(response.text)
 
 
-    time.sleep(time_between_readings)
+    machine.deepsleep(time_between_readings)
 
 
 
