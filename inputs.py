@@ -5,7 +5,6 @@ import busio
 import digitalio
 import adafruit_mcp3xxx.mcp3008 as MCP
 from adafruit_mcp3xxx.analog_in import AnalogIn
-import machine
 import pandas as pd
 import requests
 from pandas.io.json import json_normalize
@@ -13,6 +12,7 @@ import os.path
 from datetime import datetime, timedelta
 import numpy as np
 import json
+import os
 
 # ssh mendel@192.168.137.114
 
@@ -157,7 +157,7 @@ while True:
     print(response.text)
 
 
-    machine.deepsleep(time_between_readings)
+    os.system('systemctl suspend -i 3540')
 
 
 
