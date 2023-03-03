@@ -41,7 +41,7 @@ mcp = MCP.MCP3008(spi, cs)
 chan0 = AnalogIn(mcp, MCP.P0)
 chan2 = AnalogIn(mcp, MCP.P2)
 
-time_between_readings = 3540000 #59 minutes in ms
+time_between_readings = 59*60 #59 minutes
 
 
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
@@ -157,7 +157,7 @@ while True:
     print(response.text)
 
 
-    os.system('systemctl suspend -i 3540')
+    time.sleep(time_between_readings)
 
 
 
