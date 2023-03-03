@@ -51,11 +51,11 @@ csv_path = "uploadData.csv"
 url = 'https://vbxih78ri8.execute-api.us-east-2.amazonaws.com/Main'
 
 def average_inputs():
-    inputs_averaged = []
-    pressure = []
-    temp = []
-    hum = []
-    sR = []
+    inputs_averaged = [0]*6
+    pressure = [0]*6
+    temp = [0]*6
+    hum = [0]*6
+    sR = [0]*6
     print("Averaging current readings!")
     for i in range(6):
         pressure[i] = bme280.pressure
