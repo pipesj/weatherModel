@@ -64,20 +64,20 @@ def average_inputs():
         temp[i] = bme280.temperature
         hum[i] = bme280.relative_humidity
         power[i] = chan0.voltage*((chan0.voltage - chan2.voltage) / 10000 )   #10*10^3 kOhm resistor... V*V/R = VI = Watts
-        sR[i] = chan0.voltage*187.9
-        print("Reading #%d \n SolarRad: %f, Power %f, Pressure %f, Temp %f, Humidity %f." %(i, sR[i], power[i], pressure[i], temp[i],hum[i]))
+        sR[i] = chan0.voltage
+        
         time.sleep(5)
     pressure = np.array(pressure)
     temp = np.array(temp)
     hum = np.array(hum)
     sR = np.array(sR)
 
-  
+    
     inputs_averaged[0] = np.mean(pressure)
     inputs_averaged[1] = np.mean(temp)
     inputs_averaged[2] = np.mean(hum)
     inputs_averaged[3] = toSolarRad(np.mean(sR))
-
+    print("SolarRad: %f, Pressure %f, Temp %f, Humidity %f." %(inputs_averaged[3], inputs_averaged[0], inputs_averaged[1], inputs_averaged[2]))
     return inputs_averaged
 
 def toSolarRad(x):
@@ -156,6 +156,8 @@ while True:
         
     print(data)
     # Convert the data to a JSON string
+    print("Waiting 10 seconds to allow for stoppage")
+    time.sleep(20)
     payload = json.dumps(data)
 
     # Set the headers
