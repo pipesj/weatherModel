@@ -14,7 +14,8 @@ import numpy as np
 import json
 import os
 
-# ssh mendel@192.168.137.114
+# ssh mendel@192.168.137.114 for CentreField
+# ssh mendel@10.54.160.120 for ResnetLegacy
 
 kept_columns = ["datetime","temp","feelslike","dew", "humidity", "precip", "precipprob","snow","snowdepth","windspeed","winddir","pressure","cloudcover","visibility","solarradiation","uvindex"]
 csv_path = "uploadData.csv"
@@ -63,8 +64,8 @@ def average_inputs():
         temp[i] = bme280.temperature
         hum[i] = bme280.relative_humidity
         power[i] = chan0.voltage*((chan0.voltage - chan2.voltage) / 10000 )   #10*10^3 kOhm resistor... V*V/R = VI = Watts
-        sR[i] = chan0.voltage
-        print("Reading #%d \n Voltage: %f, Power %f, Pressure %f, Temp %f, Humidity %f." %(i, sR[i], power[i], pressure[i], temp[i],hum[i]))
+        sR[i] = chan0.voltage*187.9
+        print("Reading #%d \n SolarRad: %f, Power %f, Pressure %f, Temp %f, Humidity %f." %(i, sR[i], power[i], pressure[i], temp[i],hum[i]))
         time.sleep(5)
     pressure = np.array(pressure)
     temp = np.array(temp)
@@ -75,12 +76,19 @@ def average_inputs():
     inputs_averaged[0] = np.mean(pressure)
     inputs_averaged[1] = np.mean(temp)
     inputs_averaged[2] = np.mean(hum)
-    inputs_averaged[3] = np.mean(sR)
+    inputs_averaged[3] = toSolarRad(np.mean(sR))
 
     return inputs_averaged
 
+def toSolarRad(x):
+    toReturn = 0
+    if x < 0.3:
+        return 0
+    else:
+        return x*187.9
+
 while True:
-    timeZoneAdjustment = -5 #hours different from UTC to EST
+    timeZoneAdjustment = -4 #hours different from UTC to EST
     exactCurrent_datetime = datetime.utcnow()+timedelta(hours=timeZoneAdjustment)
     current_datetime = exactCurrent_datetime.replace(minute=0, second=0, microsecond=0) # Replace with the desired rounding
     target_datetime = current_datetime + timedelta(days=1)
@@ -100,7 +108,7 @@ while True:
     hours_days_addOn['dayOfYear'] = [current_datetime.timetuple().tm_yday]
     hours_days_addOn['hours'] = [current_datetime.hour]
 
-
+    # https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Springfield%2C%20MA?unitGroup=metric&key=9RGSNMG7YSS4ZZ8PMSVTGUGRX&contentType=json
     coxsackieURL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Coxsackie%2C%20NY/next7days?unitGroup=metric&include=hours&key=9RGSNMG7YSS4ZZ8PMSVTGUGRX&contentType=json"
     coxR = requests.get(coxsackieURL)
     jsonCO = coxR.json()
@@ -123,8 +131,9 @@ while True:
     hourly_dataGA = hourly_dataGA.loc[:,kept_columns[1:]]
     hourly_dataGA = hourly_dataGA.rename(columns={'pressure':'sealevelpressure'})
     hourly_dataGA = hourly_dataGA.add_suffix("GA")
+    # https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Lake%20Placid%2C%20Ny?unitGroup=metric&key=9RGSNMG7YSS4ZZ8PMSVTGUGRX&contentType=json
 
-
+    # https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Syracuse%2C%20NY?unitGroup=metric&key=9RGSNMG7YSS4ZZ8PMSVTGUGRX&contentType=json
     sharonSpringsURL = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/Sharon%20Springs%2C%20NY?unitGroup=metric&key=9RGSNMG7YSS4ZZ8PMSVTGUGRX&contentType=json"
     ssR = requests.get(sharonSpringsURL)
     jsonSS = ssR.json()
