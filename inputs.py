@@ -87,13 +87,8 @@ def toSolarRad(x):
     else:
         return x*187.9
     
-def switchToFloat(data):
-    for col in data.select_dtypes(include=['float64']).columns:
-        data[col] = data[col].astype(float)
+def jsonify():
 
-def switchToInt(data):
-    for col in data.select_dtypes(include=['int64']).columns:
-        data[col] = data[col].astype(int)
 
 
 while True:
@@ -163,7 +158,7 @@ while True:
 
     # Convert row to array
     data = combined_data.values.tolist()
-    print(combined_data.values)
+    print(combined_data.tolist())
     
         
     
