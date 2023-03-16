@@ -156,7 +156,6 @@ while True:
 
     # Convert row to array
     data = combined_data.values.tolist()
-    print(combined_data.tolist())
     
         
     
