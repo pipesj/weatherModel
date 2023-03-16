@@ -73,10 +73,10 @@ def average_inputs():
     sR = np.array(sR)
 
     
-    inputs_averaged[0] = np.mean(pressure).astype(float)
-    inputs_averaged[1] = np.mean(temp).astype(float)
-    inputs_averaged[2] = np.mean(hum).astype(float)
-    inputs_averaged[3] = toSolarRad(np.mean(sR)).astype(float)
+    inputs_averaged[0] = np.mean(pressure)
+    inputs_averaged[1] = np.mean(temp)
+    inputs_averaged[2] = np.mean(hum)
+    inputs_averaged[3] = toSolarRad(np.mean(sR))
     print("SolarRad: %f, Pressure %f, Temp %f, Humidity %f." %(inputs_averaged[3], inputs_averaged[0], inputs_averaged[1], inputs_averaged[2]))
     return inputs_averaged
 
@@ -159,6 +159,7 @@ while True:
     combined_data = pd.concat([inputReadings.iloc[0] ,hours_days_addOn.iloc[0], hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime]], axis=0, ignore_index=False)
     # Convert datetime object to string
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
+    print(combined_data.values)
     # Convert row to array
     data = combined_data.values.tolist()
     
