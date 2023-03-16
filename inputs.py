@@ -86,6 +86,15 @@ def toSolarRad(x):
         return 0
     else:
         return x*187.9
+    
+def switchToFloat(data):
+    for col in data.select_dtypes(include=['float64']).columns:
+        data[col] = data[col].astype(float)
+
+def switchToInt(data):
+    for col in data.select_dtypes(include=['int64']).columns:
+        data[col] = data[col].astype(int)
+
 
 while True:
     timeZoneAdjustment = -4 #hours different from UTC to EST
@@ -145,14 +154,15 @@ while True:
     hourly_dataSS = hourly_dataSS.loc[:,kept_columns[1:]]
     hourly_dataSS = hourly_dataSS.rename(columns={'pressure':'sealevelpressure'})
     hourly_dataSS = hourly_dataSS.add_suffix("SS")
-    print("Input readings types")
-    print(inputReadings.dtypes)
 
-    print("Hours addon")
-    print(hours_days_addOn.dtypes)
 
-    print("Hourly data")
-    print(hourly_dataSS.dtypes)
+    switchToFloat(hourly_dataSS)
+    switchToFloat(hourly_dataGA)
+    switchToFloat(hourly_dataCO)
+    switchToInt(hours_days_addOn)
+    switchToFloat(inputReadings)
+    switchToInt(inputReadings)
+
     combined_data = pd.concat([inputReadings.iloc[0] ,hours_days_addOn.iloc[0], hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime]], axis=0, ignore_index=False)
     # Convert datetime object to string
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
