@@ -73,10 +73,10 @@ def average_inputs():
     sR = np.array(sR)
 
     
-    inputs_averaged[0] = np.mean(pressure)
-    inputs_averaged[1] = np.mean(temp)
-    inputs_averaged[2] = np.mean(hum)
-    inputs_averaged[3] = toSolarRad(np.mean(sR))
+    inputs_averaged[0] = np.mean(pressure).astype(float)
+    inputs_averaged[1] = np.mean(temp).astype(float)
+    inputs_averaged[2] = np.mean(hum).astype(float)
+    inputs_averaged[3] = toSolarRad(np.mean(sR)).astype(float)
     print("SolarRad: %f, Pressure %f, Temp %f, Humidity %f." %(inputs_averaged[3], inputs_averaged[0], inputs_averaged[1], inputs_averaged[2]))
     return inputs_averaged
 
