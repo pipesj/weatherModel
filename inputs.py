@@ -149,7 +149,7 @@ while True:
     combined_data = pd.concat([inputReadings.iloc[0] ,hours_days_addOn.iloc[0], hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime]], axis=0, ignore_index=False)
     # Convert datetime object to string
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
-
+    print(combined_data.types)
     # Convert row to array
     data = combined_data.values.tolist()
     
