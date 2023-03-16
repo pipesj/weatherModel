@@ -86,8 +86,6 @@ def toSolarRad(x):
         return 0
     else:
         return x*187.9
-    
-def jsonify():
 
 
 
