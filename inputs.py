@@ -145,11 +145,17 @@ while True:
     hourly_dataSS = hourly_dataSS.loc[:,kept_columns[1:]]
     hourly_dataSS = hourly_dataSS.rename(columns={'pressure':'sealevelpressure'})
     hourly_dataSS = hourly_dataSS.add_suffix("SS")
+    print("Input readings types")
+    print(inputReadings.dtypes)
 
+    print("Hours addon")
+    print(hours_days_addOn.dtypes)
+
+    print("Hourly data")
+    print(hourly_dataSS.dtypes)
     combined_data = pd.concat([inputReadings.iloc[0] ,hours_days_addOn.iloc[0], hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime]], axis=0, ignore_index=False)
     # Convert datetime object to string
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
-    print(combined_data.dtypes)
     # Convert row to array
     data = combined_data.values.tolist()
     
