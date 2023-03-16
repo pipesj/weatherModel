@@ -160,7 +160,7 @@ while True:
     # Convert datetime object to string
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
     print("~~~~~~~~")
-    print(combined_data)
+    print(type(combined_data))
     print("~~~~~~~~")
     # Convert row to array
     data = combined_data.values.tolist()
