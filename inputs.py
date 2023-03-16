@@ -159,7 +159,7 @@ while True:
     
     # Convert the data to a JSON string
     print("Waiting 10 seconds to allow for stoppage")
-    time.sleep(20)
+    time.sleep(10)
     payload = json.dumps(data)
 
     # Set the headers
