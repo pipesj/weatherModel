@@ -157,7 +157,8 @@ while True:
     # Convert row to array
     data = combined_data.values.tolist()
     
-        
+    for i in range(len(data)):
+        print(data[i])
     
     # Convert the data to a JSON string
     print("Waiting 10 seconds to allow for stoppage")
