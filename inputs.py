@@ -159,6 +159,8 @@ while True:
     combined_data = pd.concat([inputReadings.iloc[0] ,hours_days_addOn.iloc[0], hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime]], axis=0, ignore_index=False)
     # Convert datetime object to string
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
+    
+    combined_data = combined_data.to_frame()
     float_cols = combined_data.select_dtypes(include=['float64']).columns
     int_cols = combined_data.select_dtypes(include=['int64']).columns
     combined_data[float_cols] = combined_data[float_cols].astype('float')
