@@ -154,7 +154,7 @@ while True:
     data = combined_data.values.tolist()
     
         
-    print(data.dtypes)
+    print(combined_data.dtypes)
     # Convert the data to a JSON string
     print("Waiting 10 seconds to allow for stoppage")
     time.sleep(20)
