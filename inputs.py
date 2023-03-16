@@ -101,10 +101,10 @@ while True:
     averaged_inputs = average_inputs()
 
     inputReadings['datetime'] = [current_datetime]
-    inputReadings['sealevelpressureSC'] = [round(averaged_inputs[0],2)]
-    inputReadings['tempSC'] = [round(averaged_inputs[1],2)]
-    inputReadings['humiditySC'] = [round(averaged_inputs[2],2)]
-    inputReadings['solarradiationSC'] = [averaged_inputs[3]]
+    inputReadings['sealevelpressureSC'] = [float(round(averaged_inputs[0],2))]
+    inputReadings['tempSC'] = [float(round(averaged_inputs[1],2))]
+    inputReadings['humiditySC'] = [float(round(averaged_inputs[2],2))]
+    inputReadings['solarradiationSC'] = [float(averaged_inputs[3])]
     
 
     hours_days_addOn['dayOfYear'] = [current_datetime.timetuple().tm_yday]
@@ -156,9 +156,6 @@ while True:
 
     # Convert row to array
     data = combined_data.values.tolist()
-    
-    for i in range(len(data)):
-        print(type(data[i]))
     
     # Convert the data to a JSON string
     print("Waiting 10 seconds to allow for stoppage")
