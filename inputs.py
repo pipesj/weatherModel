@@ -66,7 +66,7 @@ def average_inputs():
         power[i] = chan0.voltage*((chan0.voltage - chan2.voltage) / 10000 )   #10*10^3 kOhm resistor... V*V/R = VI = Watts
         sR[i] = chan0.voltage
         
-        time.sleep(5)
+        time.sleep(1)
     pressure = np.array(pressure)
     temp = np.array(temp)
     hum = np.array(hum)
@@ -159,15 +159,11 @@ while True:
     combined_data = pd.concat([inputReadings.iloc[0] ,hours_days_addOn.iloc[0], hourly_dataSS.loc[target_datetime], hourly_dataGA.loc[target_datetime], hourly_dataCO.loc[target_datetime]], axis=0, ignore_index=False)
     # Convert datetime object to string
     combined_data[0] = combined_data[0].strftime('%Y-%m-%d %H:%M:%S')
-    
-    combined_data = combined_data.to_frame()
-    float_cols = combined_data.select_dtypes(include=['float64']).columns
-    int_cols = combined_data.select_dtypes(include=['int64']).columns
-    combined_data[float_cols] = combined_data[float_cols].astype('float')
-    combined_data[int_cols] = combined_data[int_cols].astype('int')
+
 
     # Convert row to array
     data = combined_data.values.tolist()
+    print(combined_data.values)
     
         
     
